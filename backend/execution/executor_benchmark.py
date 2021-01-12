@@ -1,8 +1,9 @@
-'''
+"""
 This file is used for testing the performance of Pandas execution for various types of Vis
-'''
+"""
 
 import pandas as pd
+
 # import modin.pandas as pd
 
 pd.set_option("mode.chained_assignment", None)
@@ -93,7 +94,7 @@ result.to_csv("pandas_pdcut.csv")
 # # Processing Data with Pandas
 # visdf = df[['Horsepower']]
 # import numpy as np
-# series = visdf['Horsepower'].dropna() 
+# series = visdf['Horsepower'].dropna()
 # counts,bin_edges = np.histogram(series,bins=10)
 # bin_center = np.mean(np.vstack([bin_edges[0:-1],bin_edges[1:]]), axis=0)
 # visdf = pd.DataFrame(np.array([bin_center,counts]).T,columns=['Horsepower', "Number of Records"])
@@ -106,7 +107,7 @@ result.to_csv("pandas_pdcut.csv")
 # plot_range = abs(x_max - x_min)
 # markbar = x_range / plot_range * 12
 # chart = alt.Chart(visdf).mark_bar(size=markbar).encode(
-#     alt.X('Horsepower', title='Horsepower (binned)',bin=alt.Bin(binned=True), type="quantitative", 
+#     alt.X('Horsepower', title='Horsepower (binned)',bin=alt.Bin(binned=True), type="quantitative",
 #           axis=alt.Axis(labelOverlap=True), scale=alt.Scale(domain=(x_min, x_max))),
 #     alt.Y("Number of Records", type="quantitative")
 # )
