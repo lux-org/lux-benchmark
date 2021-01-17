@@ -1,5 +1,5 @@
 """
-This file is used for running scalability experiments by varying dataset size and measuring overall __repr__ performance
+This file is used for benchmarking the performance for each Vis type
 """
 import sys, os
 
