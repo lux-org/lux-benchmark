@@ -49,6 +49,7 @@ for nPts in trial_range:
 
     nPts = int(nPts)
     df = downsample_func(nPts)
+    df.intent=["RentHighQ"]
     ################
     start = time.time()
     df.maintain_metadata()
@@ -76,6 +77,7 @@ for nPts in trial_range:
 
     nPts = int(nPts)
     df = downsample_func(nPts)
+    df.intent=["RentHighQ"]
     ################
     start = time.time()
     df.maintain_metadata()
@@ -101,11 +103,11 @@ timing_df = pd.DataFrame(
     timing,
     columns=["nPts",control,"t_meta", "t_recs"],
 )
-timing_df.to_csv(f"{result_dir}{control}_time.csv", index=None)
+timing_df.to_csv(f"{result_dir}{control}_time_q2.csv", index=None)
 
 accuracy_df = pd.DataFrame(
     accuracy,
     columns=["nPts","action","NDCG","@k"],
 )
-accuracy_df.to_csv(f"{result_dir}{control}_accuracy.csv", index=None)
+accuracy_df.to_csv(f"{result_dir}{control}_accuracy_q2.csv", index=None)
 

@@ -56,9 +56,14 @@ def generate_airbnb_copies(ncopies):
     df_copies = pd.concat([df for _x in range(ncopies)])
     df_copies.to_csv(f"data/airbnb_{ncopies}x.csv", index=None)
 
+def generate_communities_copies(ncopies):
+    df = pd.read_csv("data/communities_500x.csv")
+    df_copies = pd.concat([df for _x in range(ncopies)])
+    df_copies.to_csv(f"data/communities_{ncopies}x.csv", index=None)
+
 
 def downsample_airbnb(numPoints):
-    df = pd.read_csv("data/airbnb_25x.csv")
+    df = pd.read_csv("data/airbnb_250x.csv")
     assert numPoints < len(df), f"Input numPoints must be less than df size: {len(df)}"
     df = df[
         [
@@ -76,6 +81,12 @@ def downsample_airbnb(numPoints):
             "number_of_reviews",
         ]
     ]
+    df_sampled = df.sample(n=int(numPoints))
+    return df_sampled
+
+def downsample_communities(numPoints):
+    df = pd.read_csv("data/communities_100x.csv")
+    assert numPoints < len(df), f"Input numPoints must be less than df size: {len(df)}"
     df_sampled = df.sample(n=int(numPoints))
     return df_sampled
 
