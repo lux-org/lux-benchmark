@@ -15,11 +15,12 @@ import lux
 import pandas as pd
 import utils
 from rank_utils import *
+
 # trial_range = np.geomspace(1e2, 1.2e6, num=20)
-trial_range = np.geomspace(1e2, 32561 , num=20)
+trial_range = np.geomspace(1e2, 32561, num=20)
 trial = []  # [cell count, duration]
 # Must turn off sampling, otherwise maintain_rec constant cost
-lux.config.sampling = False  
+lux.config.sampling = False
 experiment_name = "sampling_error_census"
 # df = pd.read_csv("data/airbnb_25x.csv")
 # df = df[
@@ -75,12 +76,12 @@ for nPts in trial_range:
     for action in all_recs2.keys():
         l1 = all_recs1[action]
         l2 = all_recs2[action]
-        ndcg = compute_ndcg_between_vislists(l1,l2)
+        ndcg = compute_ndcg_between_vislists(l1, l2)
         ################
         print(f"Completed {nPts}")
         trial.append([nPts, action, ndcg])
 trial_df = pd.DataFrame(
     trial,
-    columns=["nPts",control,"NDCG"],
+    columns=["nPts", control, "NDCG"],
 )
 trial_df.to_csv(f"{result_dir}{experiment_name}.csv", index=None)

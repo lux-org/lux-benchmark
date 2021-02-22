@@ -6,18 +6,19 @@ from utils import data_utils
 import pandas as pd
 import lux
 import time
+
 # Must turn off sampling, otherwise maintain_rec constant cost
-lux.config.sampling = False  
+lux.config.sampling = False
 # lux.config.plotting_backend= "matplotlib"
 nPts = 1e6
 df = data_utils.downsample_airbnb(nPts)
 # df._repr_html_()
 df.maintain_metadata()
-start = time.time()
+start = time.perf_counter()
 # df.maintain_recs(render=False)
 df._repr_html_()
-end = time.time()
-print (end-start)
+end = time.perf_counter()
+print(end - start)
 # Using gprof2dot
 # python -m profile -o altair.pstats profiling/performance_test.py
 # gprof2dot -f pstats altair.pstats | dot -Tpdf -o altair.pdf

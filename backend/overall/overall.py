@@ -30,29 +30,29 @@ for nPts in trial_range:
     nPts = int(nPts)
     df = data_utils.downsample_airbnb(nPts)
     ################
-    start = time.time()
+    start = time.perf_counter()
     df.maintain_metadata()
-    end = time.time()
+    end = time.perf_counter()
     t_meta = end - start
     ################
-    start = time.time()
+    start = time.perf_counter()
     df.maintain_recs(render=False)
-    end = time.time()
+    end = time.perf_counter()
     t_recs = end - start
     ################
-    start = time.time()
+    start = time.perf_counter()
     df._widget = df.render_widget()
-    end = time.time()
+    end = time.perf_counter()
     t_render = end - start
     ################
-    start = time.time()
+    start = time.perf_counter()
     df._repr_html_()
-    end = time.time()
+    end = time.perf_counter()
     t_1st_print = end - start
     ################
-    start = time.time()
+    start = time.perf_counter()
     df._repr_html_()
-    end = time.time()
+    end = time.perf_counter()
     t_2nd_print = end - start
     ################
     print(f"Completed {nPts}")

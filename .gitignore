@@ -1,6 +1,7 @@
 # Exclude things in the data/ and result/ folder
 data/
 result/
+ds100/
 *.pdf
 *.pstats
 # Byte-compiled / optimized / DLL files

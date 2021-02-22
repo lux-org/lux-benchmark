@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 
-
 def generate_scatter_data(numPoints):
     # Example from https://datashader.org/user_guide/Points.html
     from collections import OrderedDict as odict
@@ -56,6 +55,7 @@ def generate_airbnb_copies(ncopies):
     df_copies = pd.concat([df for _x in range(ncopies)])
     df_copies.to_csv(f"data/airbnb_{ncopies}x.csv", index=None)
 
+
 def generate_communities_copies(ncopies):
     df = pd.read_csv("data/communities_500x.csv")
     df_copies = pd.concat([df for _x in range(ncopies)])
@@ -64,7 +64,7 @@ def generate_communities_copies(ncopies):
 
 def downsample_airbnb(numPoints):
     df = pd.read_csv("data/airbnb_250x.csv")
-    assert numPoints < len(df), f"Input numPoints must be less than df size: {len(df)}"
+    assert numPoints <= len(df), f"Input numPoints must be less than df size: {len(df)}"
     df = df[
         [
             "id",
@@ -84,8 +84,10 @@ def downsample_airbnb(numPoints):
     df_sampled = df.sample(n=int(numPoints))
     return df_sampled
 
+
 def downsample_communities(numPoints):
-    df = pd.read_csv("data/communities_100x.csv")
+    # df = pd.read_csv("data/communities_100x.csv")
+    df = pd.read_csv("data/communities_1M.csv")
     assert numPoints < len(df), f"Input numPoints must be less than df size: {len(df)}"
     df_sampled = df.sample(n=int(numPoints))
     return df_sampled
@@ -93,5 +95,11 @@ def downsample_communities(numPoints):
 
 def downsample_realestate(numPoints):
     df = pd.read_csv("real_estate_3x.csv")
+    df_sampled = df.sample(n=int(numPoints))
+    return df_sampled
+
+def downsample_supermarket(numPoints):
+    df = pd.read_csv("data/supermarket_1e7.csv")
+    assert numPoints < len(df), f"Input numPoints must be less than df size: {len(df)}"
     df_sampled = df.sample(n=int(numPoints))
     return df_sampled

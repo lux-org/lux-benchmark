@@ -1,10 +1,14 @@
 import lux
 import numpy as np
-def get_hash(vis:lux.vis.Vis)-> str:
+
+
+def get_hash(vis: lux.vis.Vis) -> str:
     # Get the visualization hash for a Vis object
     # Vis(...) --> 'Vis  (x: reviews_per_month, y: number_of_reviews)'
     vis_hash = vis.__repr__()
     return vis_hash.split("mark")[0][1:-1]
+
+
 def convert_vlist_to_hashmap(vlist):
     # Convert VisList to dictionary representation
     # {'Vis  (x: ..., y: ...)': 0.55,
@@ -12,13 +16,14 @@ def convert_vlist_to_hashmap(vlist):
     #   ...}
     vdict = {}
     for vis in vlist:
-        vdict[get_hash(vis)]=vis.score
+        vdict[get_hash(vis)] = vis.score
     return vdict
 
-def get_aligned_dict(vdict,global_map):
+
+def get_aligned_dict(vdict, global_map):
     # Align each vdict based on global map
     aligned_dict = {}
-    for vis in global_map: 
+    for vis in global_map:
         if vis in vdict:
             aligned_dict[vis] = vdict[vis]
         else:
@@ -39,11 +44,14 @@ def get_aligned_dict(vdict,global_map):
 # def ndcg(ground_truth_r,r, k,debug=False):
 #     return dcg(r, k,debug=debug) / dcg(ground_truth_r,k,debug=debug)
 
-def compute_ndcg_between_vislists(l1:lux.vis.VisList,l2:lux.vis.VisList,k:int) -> float:
-    l1_scores= [vis.score for vis in l1] 
+
+def compute_ndcg_between_vislists(
+    l1: lux.vis.VisList, l2: lux.vis.VisList, k: int
+) -> float:
+    l1_scores = [vis.score for vis in l1]
     map1 = convert_vlist_to_hashmap(l1)
 
-    l2_scores= [vis.score for vis in l2] 
+    l2_scores = [vis.score for vis in l2]
     map2 = convert_vlist_to_hashmap(l2)
 
     # Combine two dictionaries map1,map2 into a single global_map
@@ -51,19 +59,22 @@ def compute_ndcg_between_vislists(l1:lux.vis.VisList,l2:lux.vis.VisList,k:int) -
     global_map.update(set(map2.keys()))
     global_map = list(global_map)
 
-    # Somehow our own NDCG calculation always leads to > 1 
+    # Somehow our own NDCG calculation always leads to > 1
     # aligned_score1 = list(get_aligned_dict(map1,global_map).values())
     # aligned_score2 = list(get_aligned_dict(map2,global_map).values())
-    # return ndcg(aligned_score1,aligned_score2,5) 
+    # return ndcg(aligned_score1,aligned_score2,5)
 
     # from scipy.stats import stats
     # rank1 = stats.rankdata(aligned_score1)
     # rank2 =stats.rankdata(aligned_score2)
-    # return ndcg(rank1,rank2,3) 
-    aligned_score1 = np.asarray([list(get_aligned_dict(map1,global_map).values())])
-    aligned_score2 = np.asarray([list(get_aligned_dict(map2,global_map).values())])
+    # return ndcg(rank1,rank2,3)
+    aligned_score1 = np.asarray([list(get_aligned_dict(map1, global_map).values())])
+    aligned_score2 = np.asarray([list(get_aligned_dict(map2, global_map).values())])
     from sklearn.metrics import ndcg_score
-    return ndcg_score(aligned_score1,aligned_score2,k=k)
+
+    return ndcg_score(aligned_score1, aligned_score2, k=k)
+
+
 # Tests
 # ground_truth_ratings = [1,2,3,4,5,6]
 # example_ratings = [3,2,3,0,1,2]
