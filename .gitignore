@@ -137,3 +137,7 @@ dmypy.json
 
 # CSV files
 *.csv
+
+# executed ipynb
+output.ipynb
+toy*.ipynb
