@@ -48,6 +48,8 @@ def get_aligned_dict(vdict, global_map):
 def compute_ndcg_between_vislists(
     l1: lux.vis.VisList, l2: lux.vis.VisList, k: int
 ) -> float:
+    if len(l1)==len(l2)==1: 
+        return 1
     l1_scores = [vis.score for vis in l1]
     map1 = convert_vlist_to_hashmap(l1)
 
@@ -74,6 +76,31 @@ def compute_ndcg_between_vislists(
 
     return ndcg_score(aligned_score1, aligned_score2, k=k)
 
+
+
+def compute_prf_between_vislists(
+    l1: lux.vis.VisList, l2: lux.vis.VisList
+) -> float:
+    assert len(l1)==len(l2)
+    l1_scores = [vis.score for vis in l1]
+    map1 = convert_vlist_to_hashmap(l1)
+
+    l2_scores = [vis.score for vis in l2]
+    map2 = convert_vlist_to_hashmap(l2)
+
+    gt = np.array(list(map1.keys()))
+    retrieved = np.array(list(map2.keys()))
+    binarize_ground_truth_r = np.ones_like(gt,dtype=int)
+    binarize_r = []
+    for x in gt:
+        if x in retrieved:
+            binarize_r.append(1)
+        else : 
+            binarize_r.append(0)
+    binarize_r = np.array(binarize_r)
+    from sklearn import metrics
+    p,r,f,_ = metrics.precision_recall_fscore_support(binarize_ground_truth_r,binarize_r,average='binary')
+    return p,r,f
 
 # Tests
 # ground_truth_ratings = [1,2,3,4,5,6]
