@@ -22,13 +22,14 @@ from lux.action.generalize import generalize
 
 ################################################################
 ############### Custom Experiment Setting  #####################
-control ="early_pruning" # "lazy_maintain"#"streaming" # #"early_pruning"
 # trial_range = np.geomspace(50000, 1e5, num=3) # airbnb test
-# dataset = "airbnb"
+dataset = "airbnb"
+trial_range = np.geomspace(10000,1e7,num=4)
 # trial_range = np.geomspace(10001, 1.2e7, num=5,dtype=int) # airbnb
 
-dataset = "communities"
-trial_range = np.geomspace(1e4, 1e6, num=5,dtype=int) # communities
+
+# dataset = "communities"
+# trial_range = np.geomspace(1e3, 100000, num=3,dtype=int) # communities
 # trial_range = np.geomspace(5001, 1.9e5, num=10)
 ################################################################
 
@@ -36,17 +37,20 @@ timing = []  # [cell count, duration]
 accuracy = []
 # Must turn off sampling, otherwise maintain_rec constant cost
 lux.config.sampling = False
+lux.config.lazy_maintain = True
+lux.config.early_pruning = True
 
 if dataset == "airbnb":
     downsample_func = data_utils.downsample_airbnb
 elif dataset == "communities":
     downsample_func = data_utils.downsample_communities
 
-trial_range = np.geomspace(10000,1e7,num=4)
+trial = []
 for nPts in trial_range:
     nPts = int(nPts)
     print(f"Start {nPts}")
     df = downsample_func(nPts)
+    df.maintain_metadata()
     ################
     start = time.perf_counter()
     correlation(df)
@@ -68,7 +72,10 @@ for nPts in trial_range:
     end = time.perf_counter()
     t_temporal = end-start
     ################
-    df.intent = ["price"]
+    if (dataset=="airbnb"):
+        df.intent = ["price"]
+    elif (dataset=="communities"):
+        df.intent = ["fold"]
     ################
     start = time.perf_counter()
     enhance(df)
@@ -93,13 +100,13 @@ trial_df = pd.DataFrame(
     trial,
     columns=[
         "nPts",
-        "t_heatmap",
-        "t_color_heatmap",
-        "t_bar",
-        "t_cbar",
-        "t_hist",
-        "t_scatter",
-        "t_color_scatter",
+        "Correlation",
+        "Distribution",
+        "Occurrence",
+        "Temporal",
+        "Enhance",
+        "Filter",
+        "Generalize"
     ],
 )
-trial_df.to_csv(f"{result_dir}{experiment_name}.csv", index=None)
+trial_df.to_csv(f"{result_dir}{experiment_name}_{dataset}.csv", index=None)
