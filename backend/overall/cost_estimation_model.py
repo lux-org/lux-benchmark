@@ -37,6 +37,14 @@ for nPts in trial_range:
     df.maintain_metadata()
     # Warm start
     vis = Vis(['latitude','longitude'], df)
+    ################# Single Col Selection (Mock Scatterplot Component) ############################
+    if (experiment =="selection"):
+        for col in df.columns:
+            start = time.perf_counter()
+            vis_data = df[col]
+            end = time.perf_counter()
+            t = end - start
+            trial.append([nPts,t,col])
     ################# Regular Scatterplot ############################
     quantitative=['latitude', 'longitude', 'price', 'minimum_nights', 'number_of_reviews', 'reviews_per_month', 'calculated_host_listings_count']
     if (experiment=="scatter"):
@@ -91,6 +99,7 @@ for nPts in trial_range:
     # ################# Heatmap ############################
     elif (experiment=="heatmap"):
         binlist = np.geomspace(5,500,10,dtype=int)
+        lux.config.heatmap = True
         for b in binlist:
             lux.config.heatmap_bin_size = b
             start = time.perf_counter()
@@ -132,7 +141,7 @@ elif (experiment=="scatter"):
         trial,
         columns=["nPts","time","attr1","attr2"]
     )
-elif (experiment=="colorscatter"):
+elif (experiment=="colorscatter" or experiment == "selection"):
     trial_df = pd.DataFrame(
         trial,
         columns=["nPts","time","attr"]

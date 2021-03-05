@@ -78,16 +78,9 @@ def compute_ndcg_between_vislists(
 
 
 
-def compute_prf_between_vislists(
-    l1: lux.vis.VisList, l2: lux.vis.VisList
-) -> float:
-    assert len(l1)==len(l2)
-    l1_scores = [vis.score for vis in l1]
-    map1 = convert_vlist_to_hashmap(l1)
-
-    l2_scores = [vis.score for vis in l2]
-    map2 = convert_vlist_to_hashmap(l2)
-
+def compute_prf_between_vislists(map1, map2) -> float:
+    assert len(map1)==len(map2)
+    
     gt = np.array(list(map1.keys()))
     retrieved = np.array(list(map2.keys()))
     binarize_ground_truth_r = np.ones_like(gt,dtype=int)

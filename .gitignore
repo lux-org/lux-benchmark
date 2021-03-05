@@ -4,6 +4,8 @@ result/
 ds100/
 *.pdf
 *.pstats
+*.pkl
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
