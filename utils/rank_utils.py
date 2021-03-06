@@ -80,7 +80,8 @@ def compute_ndcg_between_vislists(
 
 def compute_prf_between_vislists(map1, map2) -> float:
     assert len(map1)==len(map2)
-    
+    map1 = sort_transform_dict(map1)
+    map2 = sort_transform_dict(map2)
     gt = np.array(list(map1.keys()))
     retrieved = np.array(list(map2.keys()))
     binarize_ground_truth_r = np.ones_like(gt,dtype=int)
@@ -95,6 +96,13 @@ def compute_prf_between_vislists(map1, map2) -> float:
     p,r,f,_ = metrics.precision_recall_fscore_support(binarize_ground_truth_r,binarize_r,average='binary')
     return p,r,f
 
+def sort_transform_dict(dictmap):
+    # x and y swapped sometimes during correlation, causing the scores to be low
+    # the sort transform orders the vis signature string so that it is independent of x or y (content only matching)
+    srt_keys = []
+    for key in list(dictmap.keys()):
+        srt_keys.append("".join(sorted(key)))
+    return dict(zip(srt_keys,dictmap.values()))
 # Tests
 # ground_truth_ratings = [1,2,3,4,5,6]
 # example_ratings = [3,2,3,0,1,2]
@@ -102,3 +110,4 @@ def compute_prf_between_vislists(map1, map2) -> float:
 # assert np.isclose(dcg(example_ratings,6),6.861,1e-2) #check DCG calculation (Based on Wikipedia example)
 # assert np.isclose(ndcg(ideal_ordering,[3,2,3,0,1,2],6),0.785,1e-2) #check NDCG calculation (Based on Wikipedia example)
 # assert np.isclose(ndcg([3,1,2],[3, 1, 2],3),1) #sanity check
+

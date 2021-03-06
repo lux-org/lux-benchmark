@@ -16,7 +16,9 @@ import pandas as pd
 import pickle as pkl
 from utils.rank_utils import convert_vlist_to_hashmap
 # trial_range = np.linspace(0.1,0.9,9)
-trial_range = np.linspace(0.1,0.9,9)
+# trial_range = np.linspace(0.1,0.9,4)
+# trial_range = np.linspace(0.1,0.6,6)
+trial_range = np.linspace(0.05,0.95,19)
 DEBUG = True
 trial = []  # [cell count, duration]
 # Must turn off sampling, otherwise maintain_rec constant cost
@@ -31,7 +33,7 @@ dataset ="communities"
 datapath = "data/communities_100k.csv"
 # datapath = "../lux-datasets/data/communities.csv"
 experiment_name = f"sampling_error_{dataset}"
-N_repeat= 5
+N_repeat= 10
 # Ground Truth Calculation (Create tmp/ directory, only need to run this once)
 # if dataset =="communities":
 #     df = pd.read_csv(datapath)
@@ -40,7 +42,7 @@ N_repeat= 5
 #     for action in q1_recs1.keys():
 #         l1 = q1_recs1[action]
 #         map1 = convert_vlist_to_hashmap(l1)
-#         with open(f"tmp/communities_gt_q1_recs1_{action}.pkl",'wb') as f:
+#         with open(f"tmp/communities_gt_q1_{action}.pkl",'wb') as f:
 #             pkl.dump(map1,f)
 
 #     df.intent = ["fold"]
@@ -49,7 +51,7 @@ N_repeat= 5
 #     for action in q2_recs1.keys():
 #         l1 = q2_recs1[action]
 #         map1 = convert_vlist_to_hashmap(l1)
-#         with open(f"tmp/communities_gt_q2_recs1_{action}.pkl",'wb') as f:
+#         with open(f"tmp/communities_gt_q2_{action}.pkl",'wb') as f:
 #             pkl.dump(map1,f)
 
 for nfrac in trial_range:
@@ -57,17 +59,19 @@ for nfrac in trial_range:
     print(f"Working on nfrac {nfrac}")
     if (dataset == "communities"):
         orig_df = pd.read_csv(datapath)
-        seed_lst = np.arange(N_repeat)
-        i =0
+        # seed_lst = np.arange(N_repeat)
+        seed_lst = np.arange(5,20)
         for seed in seed_lst:
-            print (f"Working on Trial #{i}")
+            print (f"Working on Trial #{seed}")
             df = orig_df.sample(frac=nfrac,random_state=seed)
             df.maintain_recs(render=False)
             q1_recs2 = df.recommendation
             
             for action in q1_recs2.keys():
-                map1 = pkl.load(open(f"tmp/communities_gt_q1_recs1_{action}.pkl",'rb'))
+                map1 = pkl.load(open(f"tmp/communities_gt_q1_{action}.pkl",'rb'))
                 map2 = convert_vlist_to_hashmap(q1_recs2[action])
+                with open(f"tmp/communities_nfrac{nfrac:.2f}_{action}_{seed}.pkl",'wb') as f:
+                    pkl.dump(map2,f)
                 if len(map2)==15 :
                     prf = rank_utils.compute_prf_between_vislists(map1,map2)
                     trial.append([nfrac, action, prf[0], prf[1], prf[2]])
@@ -79,14 +83,15 @@ for nfrac in trial_range:
             df.maintain_recs(render=False)
             q2_recs2 = df.recommendation
             for action in q2_recs2.keys():
-                map1 = pkl.load(open(f"tmp/communities_gt_q2_recs1_{action}.pkl",'rb'))
+                map1 = pkl.load(open(f"tmp/communities_gt_q2_{action}.pkl",'rb'))
                 map2 = convert_vlist_to_hashmap(q2_recs2[action])
+                with open(f"tmp/communities_nfrac{nfrac:.2f}_{action}_{seed}.pkl",'wb') as f:
+                    pkl.dump(map2,f)
                 if len(map2)==15 :
                     prf = rank_utils.compute_prf_between_vislists(map1,map2)
                     trial.append([nfrac, action, prf[0], prf[1], prf[2]])
                 else: 
                     print (f"{action} action unstable for nfrac {nfrac} of {dataset}")
-            i+=1
         
 
 trial_df = pd.DataFrame(
