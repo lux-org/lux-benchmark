@@ -25,12 +25,12 @@ trial = []  # [cell count, duration]
 lux.config.sampling = False
 lux.config.heatmap = False
 lux.config.early_pruning = False
-lux.config.lazy_maintain = False
+lux.config.lazy_maintain = True
 lux.config.streaming = False
 
 # dataset = "airbnb"
 dataset ="communities"
-datapath = "data/communities_100k.csv"
+datapath = "data/communities_10000.csv"
 # datapath = "../lux-datasets/data/communities.csv"
 experiment_name = f"sampling_error_{dataset}"
 N_repeat= 10
@@ -42,7 +42,7 @@ N_repeat= 10
 #     for action in q1_recs1.keys():
 #         l1 = q1_recs1[action]
 #         map1 = convert_vlist_to_hashmap(l1)
-#         with open(f"tmp/communities_gt_q1_{action}.pkl",'wb') as f:
+#         with open(f"tmp/communities_gt_{action}.pkl",'wb') as f:
 #             pkl.dump(map1,f)
 
 #     df.intent = ["fold"]
@@ -51,7 +51,7 @@ N_repeat= 10
 #     for action in q2_recs1.keys():
 #         l1 = q2_recs1[action]
 #         map1 = convert_vlist_to_hashmap(l1)
-#         with open(f"tmp/communities_gt_q2_{action}.pkl",'wb') as f:
+#         with open(f"tmp/communities_gt_{action}.pkl",'wb') as f:
 #             pkl.dump(map1,f)
 
 for nfrac in trial_range:
@@ -59,8 +59,8 @@ for nfrac in trial_range:
     print(f"Working on nfrac {nfrac}")
     if (dataset == "communities"):
         orig_df = pd.read_csv(datapath)
-        # seed_lst = np.arange(N_repeat)
-        seed_lst = np.arange(5,20)
+        seed_lst = np.arange(N_repeat)
+        # seed_lst = np.arange(5,20)
         for seed in seed_lst:
             print (f"Working on Trial #{seed}")
             df = orig_df.sample(frac=nfrac,random_state=seed)
@@ -68,7 +68,7 @@ for nfrac in trial_range:
             q1_recs2 = df.recommendation
             
             for action in q1_recs2.keys():
-                map1 = pkl.load(open(f"tmp/communities_gt_q1_{action}.pkl",'rb'))
+                map1 = pkl.load(open(f"tmp/communities_gt_{action}.pkl",'rb'))
                 map2 = convert_vlist_to_hashmap(q1_recs2[action])
                 with open(f"tmp/communities_nfrac{nfrac:.2f}_{action}_{seed}.pkl",'wb') as f:
                     pkl.dump(map2,f)
@@ -83,7 +83,7 @@ for nfrac in trial_range:
             df.maintain_recs(render=False)
             q2_recs2 = df.recommendation
             for action in q2_recs2.keys():
-                map1 = pkl.load(open(f"tmp/communities_gt_q2_{action}.pkl",'rb'))
+                map1 = pkl.load(open(f"tmp/communities_gt_{action}.pkl",'rb'))
                 map2 = convert_vlist_to_hashmap(q2_recs2[action])
                 with open(f"tmp/communities_nfrac{nfrac:.2f}_{action}_{seed}.pkl",'wb') as f:
                     pkl.dump(map2,f)
