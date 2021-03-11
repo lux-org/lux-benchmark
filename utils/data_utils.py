@@ -51,7 +51,11 @@ def downsample_airbnb(numPoints):
     assert numPoints <= len(df), f"Input numPoints must be less than df size: {len(df)}"
     df_sampled = df.sample(n=int(numPoints))
     return df_sampled
-
+def save_downsample_airbnb(numPoints):
+    df = pd.read_csv("data/airbnb_250x.csv")
+    assert numPoints < len(df), f"Input numPoints must be less than df size: {len(df)}"
+    df_sampled = df.sample(n=int(numPoints),random_state=111)
+    df_sampled.to_csv(f"data/airbnb_{numPoints}.csv", index=None)
 
 def save_downsample_communities(numPoints):
     df = pd.read_csv("data/communities_100x.csv")
