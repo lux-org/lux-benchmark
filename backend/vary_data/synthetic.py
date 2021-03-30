@@ -28,7 +28,7 @@ def generate_synthetic_dataframe(N_cols, size):
 
     data = []
     for _ in range(N_ints):
-        int_col = np.array(random.sample(range(1, 100000),size))
+        int_col = np.array(random.sample(range(1, 1000000),size))
         data.append(int_col)
     for _ in range(N_floats):
         float_col = np.random.random(size)
