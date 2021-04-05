@@ -144,3 +144,6 @@ dmypy.json
 output.ipynb
 toy*.ipynb
 *output*.ipynb
+backend/macrobenchmark/*
+backend/vary_data/print*
+backend/macrobenchmark/airbnb
