@@ -3,6 +3,7 @@ data/
 result/
 ds100/
 *.pdf
+*.png
 *.pstats
 *.pkl
 

@@ -41,7 +41,7 @@ def generate_airbnb_copies(ncopies):
 
 
 def generate_communities_copies(ncopies):
-    df = pd.read_csv("data/communities.csv")
+    df = pd.read_csv("../lux-datasets/data/communities.csv")
     df_copies = pd.concat([df for _x in range(ncopies)])
     df_copies.to_csv(f"data/communities_{ncopies}x.csv", index=None)
 
