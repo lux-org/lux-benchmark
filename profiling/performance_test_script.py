@@ -1,6 +1,13 @@
 import pandas as pd
+import sys, os
+os.chdir('..')
+os.chdir('lux')
 import lux
+os.chdir('..')
+os.chdir('lux-benchmark')
+
 import profile
+
 
 # Must turn off sampling, otherwise maintain_rec constant cost
 lux.config.sampling = False

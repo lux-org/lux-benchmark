@@ -2,7 +2,13 @@
 Experiments to benchmark Lux Performance
 
 ## Setup
-First, ensure `lux-datasets` is in the same directory as this one locally. This will allow you to run the following command to generate large airbnb and communities datasets:
+First, run the following command to download the necessary datasets:
+
+```
+./download_data.sh
+```
+
+This will allow you to run the following command to generate large airbnb and communities datasets:
 
 ```
 python make_dataset.py
