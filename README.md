@@ -14,16 +14,16 @@ This will allow you to run the following command to generate large airbnb and co
 python make_dataset.py
 ```
 
-## Possible Experiments
+## Experiments
 
 ### Overall Benchmarking
-We can divide basic `lux` computation into three main areas:
+The time used for benchmarking can be broken down into three parts:
 
-- t_meta: time of computing metadata
-- t_recs: time for computing and generating recommendations 
-- t_render: time for Matplotlib/Altair to build the visualization in the backend
+- t_meta: time of computing the metadata
+- t_recs: time for computing and generating the visualization recommendations 
+- t_render: time for renderer (e.g., Matplotlib, Altair) to build the visualization in the backend
 
-As an aside, `t_render` is a good representation of the front-end run time, since after the visualizations are rendered, it takes very little time to print the visualizations.
+As an aside, `t_render` is a good representation of the runtime on the front-end, since after the visualizations are rendered, it takes very little time to print the visualizations.
 
 To determine how these times grow with the size of the dataset, run the command below. Make sure the directory `overall_results` exists in `backend/overall` before running the command.
 
@@ -40,10 +40,10 @@ We can utilize `pstats` to profile the Lux backend. To do this, we run the follo
 python profiling/performance_test_script.py
 ```
 
-This line will generate a file with all the profiling data. We then run the following:
+This line will generate a file with all the profiling data. We can use the [gprof2dot](https://github.com/jrfonseca/gprof2dot) library as follows:
 
 ```
 gprof2dot -f pstats profiling/altair.pstats | dot -Tpdf -o profiling/altair.pdf
 ```
 
-This will generate a PDF visualizing a graph which highlights which methods in Lux took the most amount of time to run.
+This will generate a PDF visualizing a graph which highlights which function calls in Lux took the most amount of time to run.
