@@ -1,3 +1,6 @@
+"""
+This file is used for running profiling experiments by measuring _ipython_display_ performance using pstats profiler
+"""
 import pandas as pd
 import sys, os
 os.chdir('..')
