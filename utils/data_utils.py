@@ -34,7 +34,7 @@ def generate_scatter_data(numPoints):
 
 def generate_airbnb_copies(ncopies):
     df = pd.read_csv(
-        "https://github.com/lux-org/lux-datasets/blob/master/data/airbnb_nyc.csv?raw=True"
+        "data/airbnb.csv"
     )
     df_copies = pd.concat([df for _x in range(ncopies)])
     df_copies.to_csv(f"data/airbnb_{ncopies}x.csv", index=None)

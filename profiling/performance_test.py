@@ -11,7 +11,7 @@ import time
 lux.config.sampling = False
 # lux.config.plotting_backend= "matplotlib"
 nPts = 1e6
-df = data_utils.downsample_airbnb(nPts)
+df = pd.read_csv('data/airbnb_1000000.csv')
 # df._repr_html_()
 df.maintain_metadata()
 start = time.perf_counter()
