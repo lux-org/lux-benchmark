@@ -47,3 +47,35 @@ gprof2dot -f pstats profiling/altair.pstats | dot -Tpdf -o profiling/altair.pdf
 ```
 
 This will generate a PDF visualizing a graph which highlights which function calls in Lux took the most amount of time to run.
+
+
+### Heatmap Profiling
+This process will profile how the run time of generating heatmaps in Lux scales with the configurated bin size of the heatmap.
+
+To run the experiment, first make a new directory (if not already created) by running the following command:
+
+```
+mkdir backend/heatmap/heatmap_profiling
+```
+
+Then, run the following in the root directory:
+
+```
+papermill backend/heatmap/Heatmap_Profiling.ipynb backend/heatmap/heatmap_profiling/output.ipynb
+```
+
+Note: This script requires `papermill` and `python>=3.9`.
+
+The above script will profile Lux in generating a heatmap using the airbnb dataset. It tests bin sizes from 1 to 100. If you want to edit that number, you can pass in a parameter like shown:
+
+```
+papermill backend/heatmap/Heatmap_Profiling.ipynb backend/heatmap/heatmap_profiling/output.ipynb -p max_heatmap_dim 200
+```
+
+You can also use sampling to generate more accurate visualizations. To specify the number of samples per bin size, you can pass in a parameter like shown:
+
+```
+papermill backend/heatmap/Heatmap_Profiling.ipynb backend/heatmap/heatmap_profiling/output.ipynb -p num_samples 70 -p max_heatmap_dim 200
+```
+
+All data and visualizations generated are timestamped and placed in `backend/heatmap/heatmap_profiling`.
